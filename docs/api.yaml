@@ -1,0 +1,131 @@
+openapi: 3.0.3
+info:
+  title: Serverless TS Example
+  version: 0.0.1
+
+tags:
+  - name: events
+    description: Events routes
+  - name: users
+    description: Events routes
+  - name: service
+    description: Service routes
+
+components:
+  schemas:
+    RequestValidationError:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: Error code
+        statusCode:
+          type: number
+          description: HTTP status code of the error
+          example: 400
+        message:
+          type: string
+          description: Error message
+          example: Bad request
+        details:
+          type: string
+          description: Error details
+
+    AuthError:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: Error code
+        statusCode:
+          type: number
+          description: Not authenticated
+          example: 401
+        message:
+          type: string
+          description: Error message
+          example: Not authenticated
+        details:
+          type: string
+          description: Error details
+
+    NotFoundError:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: Error code
+        statusCode:
+          type: number
+          description: Not authenticated
+          example: 404
+        message:
+          type: string
+          description: Error message
+          example: Not found
+        details:
+          type: string
+          description: Error details
+
+    ServerError:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: Error code
+        statusCode:
+          type: number
+          description: HTTP status code of the error
+          example: 500
+        message:
+          type: string
+          description: Error message
+          example: Internal server error
+        details:
+          type: string
+          description: Error details
+
+  responses:
+    BadRequestErrorResponse:
+      description: Issue with connection
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestValidationError'
+
+    AuthErrorResponse:
+      description: User not authenticated
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserNotSubscribedError'
+
+
+    NotFoundResponse:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundError'
+
+    ServerInternalErrorResponse:
+      description: Server not responses 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServerError'
+
+paths:
+  /health:
+    get:
+      tags:
+        - service
+      security: []
+      summary: Healthcheck endpoint.
+      description: A simple endpoint for checking if API is live.
+      responses:
+        '200':
+          description: OK
+        '500':
+          $ref: '#/components/responses/ServerInternalErrorResponse'
+

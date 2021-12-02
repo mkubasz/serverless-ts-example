@@ -1,0 +1,81 @@
+service: serverless-ts-example
+
+frameworkVersion: "2"
+
+useDotenv: true
+
+package:
+  individually: true
+  exclude:
+    - Makefile
+    - Dockerfile*
+    - "*.md"
+    - .dockerignore
+    - .eslintcache
+    - .eslintignore
+    - .eslintrc
+    - .github/**
+    - .node-version
+    - .idea/
+    - events/**
+    - tests/**
+    - bin/**
+    - build/**
+    - dist/**
+    - test/**
+    - coverage/**
+    - "**/*.spec.ts"
+    - "**/__tests__/**"
+    - package-lock.json
+    - package.json
+provider:
+  name: aws
+  runtime: nodejs14.x
+  memorySize: 1024
+  lambdaHashingVersion: 20201221
+  region: ${opt:region, "us-east-1"}
+  httpApi:
+    cors: true
+  environment:
+    STAGE: ${self:custom.stage}
+    VERSION: ${env:VERSION}
+
+custom:
+  stage: ${opt:stage, "dev"}
+  ssmPath: /api
+  prune:
+    automatic: true
+    number: 5
+  esbuild:
+    bundle: true
+    minify: false
+    packager: npm
+
+functions:
+  api:
+    handler: src/handlers/apiHandler.api
+    timeout: 28
+    events:
+      - httpApi:
+          path: /{path+}
+          method: GET
+      - httpApi:
+          path: /{path+}
+          method: POST
+  # fpApi:
+  #   handler: src/handlers/fpApi.entry
+  #   timeout: 28
+  #   runtime: nodejs14.x
+  #   events:
+  #     - httpApi:
+  #         path: /events
+  #         method: get
+  #     - httpApi:
+  #         path: /events
+  #         method: post
+  #
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
