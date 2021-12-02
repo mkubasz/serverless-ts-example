@@ -34,4 +34,8 @@ class ApplicationServer extends Application {
   }
 }
 
-export const api = ServerlessHttp(new ApplicationServer());
+export const api = ServerlessHttp(new ApplicationServer(), {
+  request(req: any, event: any, context: any) {
+    context.callbackWaitsForEmptyEventLoop = false;
+  },
+});
