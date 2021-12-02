@@ -9,29 +9,19 @@
 ## Architecture structure
 
 ```sh
-code
- |
-.env < !-- Local environment file --/>
+.env
  |
 tests
  |
 src
    |
-   +-- config < !-- Configuration directory --/>
+   +-- config
    |
    +-- handlers < !-- Lambda functions --/>
    | 
    +-- helpers < !-- All client classes and common services --/>
    | 
    +-- modules
-      |
-      +-- example-module < !-- Domain modules used for handlers --/>
-        |
-        +-- controller.ts
-        |           
-        +-- repository.ts 
-        |        
-        +-- service.ts
 ```
 
 ## Install
